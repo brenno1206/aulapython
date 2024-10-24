@@ -1,16 +1,61 @@
-# This is a sample Python script.
+import pandas as pd
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+def ler(caminho_arquivo):
+    try:
+        df = pd.read_excel(caminho_arquivo)
+    except FileNotFoundError:
+        print("Arquivo não encontrado")
+    except Exception as e:
+        print(f"Ocorreu um erro: {e}")
+    return df
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def verificacao(dataframe):
+    try:
+        errados = []
+        matricula = dataframe['Matrícula']
+        for registro in matricula:
+            if  str(registro).isdigit():
+                continue
+            else:
+                print(f"Mátricula {registro} inválida ")
+                errados.append(registro)
+        nome = dataframe['Nome do Empregado']
+
+        for registro in nome:
+            if str(registro).strip().isalpha():
+                continue
+            else:
+                print(f"Nome {registro} inválido")
+                errados.append(registro)
+
+        sexo = dataframe['Sexo']
+        for registro in sexo:
+            if registro == 'M' or registro == 'F':
+                continue
+            else:
+                print(f"Sexo {registro} inválido")
+                errados.append(registro)
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+        horas = dataframe['Horas Trabalhadas']
+        for registro in horas:
+            if str(registro).isdigit():
+                continue
+            else:
+                print(f"Horas Trabalhadas {registro} inválidas ")
+                errados.append(registro)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+        return errados
+    except Exception as e:
+        print(f"Erro de execução {e}")
+
+
+arquivo = r"C:\Users\alunodev10\Desktop\Registros_Empregados.xlsx"
+dataframe = (ler(arquivo))
+
+lista_retirados = verificacao(dataframe)
+
+for i in lista_retirados:
+    if i not in dataframe:
+        print(i)
