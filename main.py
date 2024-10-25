@@ -39,9 +39,9 @@ def verificar(funcionario, indice): # O argumento é um registro de funcionário
         print(f"Erro de execuçao {e}")
 
 
-def calcularSalario(num, df_func):
-    salarioHora = float(df_func.iloc[3])
-    horasTrabalhadas = float(df_func.iloc[4])
+def calcularSalario(df_func):
+    salarioHora = float(df_func['Salário Hora'])
+    horasTrabalhadas = float(df_func['Horas Trabalhadas'])
     salarioBruto = salarioHora * horasTrabalhadas
     descontos = salarioBruto * 0.10
     salarioLiquido =  salarioBruto - descontos
@@ -75,6 +75,7 @@ def visualizar(dadosFunc, resultados, funcionariosValidos):
     except Exception as e:
         print(f"Erro de execução: {e}")
 
+
 # INÍCIO DO CÓDIGO
 try:
     arquivo = r'/Users/brennog/Desktop/Pasta1.xlsx'
@@ -83,14 +84,14 @@ try:
     num_indices = dataFrame.shape[0] # .Shape[x] retorna a quantidade de linhas da coluna x
     funcionariosValidosIndices = []
 
-    for indice in range(num_indices): # Para cada funcionário de 0 ao final
-        linha = dataFrame.loc[indice] # Seleciona todos os registros de uma linha, ou seja do funcionário de indice .loc[x]
+    for indice in range(num_indices): # Para o indíce de cada coluna
+        linha = dataFrame.loc[indice] # .loc[x] Seleciona todos os registros de uma linha de índice = x,
         if verificar(linha, indice): # Se a verificação for verdadeira, o número de registro do usuário é guardado no vetor de funcionariosValidos
             funcionariosValidosIndices.append(indice)
 
     funcionariosSalarios = []
     for indiceValido in funcionariosValidosIndices:
-        funcionariosSalarios.append(calcularSalario(indiceValido,dataFrame.loc[indiceValido])) # a função retorna um vetor de vetores
+        funcionariosSalarios.append(calcularSalario(dataFrame.loc[indiceValido])) # a função retorna um vetor
 
     visualizar(dataFrame, funcionariosSalarios, funcionariosValidosIndices) # Para visualizar, precisa do Dataframe, dos funcionários válidos e do salário de cada um
 except Exception as e:
